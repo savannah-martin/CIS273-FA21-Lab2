@@ -19,12 +19,6 @@ namespace Lab2
 
         public static bool IsBalanced(string s)
         {
-            if(s.ToString().Length == 1)
-            {
-                return false;
-            }
-
-            
             Stack<char> stack = new Stack<char>();
 
             foreach( char c in s)
@@ -38,6 +32,10 @@ namespace Lab2
                 // If closing symbol, then see if it matches the top
                 else if (c == '}' || c == '>' || c == ']' || c == ')')
                 {
+                    
+                    if (stack.Count == 0) {
+                        return false;
+                    }
                     if( Matches(stack.Peek(), c) )
                     {
                         stack.Pop();
