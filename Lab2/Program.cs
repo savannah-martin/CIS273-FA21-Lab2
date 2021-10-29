@@ -11,6 +11,7 @@ namespace Lab2
             //IsBalanced("{ int a = new int[ ] ( ( ) ) }");
 
             Evaluate("5 3 11 + -");
+            Evaluate("2 2 +"); //4
 
         }
 
@@ -18,6 +19,12 @@ namespace Lab2
 
         public static bool IsBalanced(string s)
         {
+            if(s.ToString().Length == 1)
+            {
+                return false;
+            }
+
+            
             Stack<char> stack = new Stack<char>();
 
             foreach( char c in s)
@@ -62,8 +69,36 @@ namespace Lab2
         private static bool Matches(char open, char close)
         {
             // do the matching
-
-            return true;
+            switch (open)
+            {
+                case '{':
+                    if (close == '}')
+                    {
+                        return true;
+                    }
+                    return false;
+                case '<':
+                    if (close == '>')
+                    {
+                        return true;
+                    }
+                    return false;
+                case '[':
+                    if (close == ']')
+                    {
+                        return true;
+                    }
+                    return false;
+                case '(':
+                    if (close == ')')
+                    {
+                        return true;
+                    }
+                    return false;
+                default:
+                    // Do Something
+                    return false;
+            }
         }
 
         // Evaluate("5 3 11 + -")	// returns -9
@@ -71,16 +106,47 @@ namespace Lab2
         
         public static double? Evaluate(string s)
         {
-            // parse into tokens (strings)
-
-            string[] tokens = s.Split();
 
             Stack<double> stack = new Stack<double>();
 
+            string[] tokens = s.Split();
+            string operators = "+-*/^";
+
+            foreach (string t in tokens)
+            {
+                if (!operators.Contains(t))
+                {
+                    double d = double.Parse(t);
+                    stack.Push(d);
+                }
+                else
+                {
+                    double top = stack.Pop();
+                    double below = stack.Pop();
+                    if (t == "+")
+                    {
+                        stack.Push(below + top);
+                    }
+                    if (t == "-")
+                    {
+                        stack.Push(below - top);
+                    }
+                    if (t == "*")
+                    {
+                        stack.Push(below * top);
+                    }
+                    if (t == "/")
+                    {
+                        stack.Push(below / top);
+                    }
+                }
+
+            }
+
+            // parse into tokens (strings)
             // foreach token
                 // If token is an integer
                 // Push on stack
-
                 // If token is an operator
                     // Pop twice and save both values
                     // (if you can't pop twice, then return null)
@@ -88,7 +154,7 @@ namespace Lab2
                     // Push the result on to stack
 
 
-            if( stack.Count != 1)
+            if ( stack.Count != 1)
             {
                 return null;
             }
